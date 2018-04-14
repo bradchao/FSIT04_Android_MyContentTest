@@ -34,24 +34,49 @@ public class MainActivity extends AppCompatActivity {
 
     // read settings
     public void test1(View view) {
-        Uri uri = Settings.System.CONTENT_URI;
-        Log.v("brad", uri.toString());
-        //Uri.parse("content://settings/system");
+//        Uri uri = Settings.System.CONTENT_URI;
+//        Log.v("brad", uri.toString());
+//        //Uri.parse("content://settings/system");
+//
+//        Cursor cursor = contentResolver.query(uri,
+//                null,null,
+//                null,null);
+//
+//        while (cursor.moveToNext()){
+//            String name = cursor.getString(cursor.getColumnIndex("name"));
+//            String value = cursor.getString(cursor.getColumnIndex("value"));
+//            Log.v("brad", name + " => " + value);
+//        }
+//        cursor.close();
 
-        Cursor cursor = contentResolver.query(uri,
-                null,null,
-                null,null);
+        Log.v("brad", "==> " +
+                getSettingValue(Settings.System.SCREEN_BRIGHTNESS));
 
-        while (cursor.moveToNext()){
-            String name = cursor.getString(cursor.getColumnIndex("name"));
-            String value = cursor.getString(cursor.getColumnIndex("value"));
-            Log.v("brad", name + " => " + value);
+
+    }
+
+    private String getSettingValue(String name){
+        String ret = "";
+        Cursor cursor = contentResolver.query(Settings.System.CONTENT_URI,
+                new String[]{"name", "value"},
+                "name = ?",
+                new String[]{name}, null);
+        if (cursor.getCount()>0){
+            cursor.moveToFirst();
+            ret = cursor.getString(cursor.getColumnIndex("value"));
         }
-        cursor.close();
+
+        return ret;
     }
 
     public void test2(View view) {
+        Settings.System.putInt(contentResolver,
+                Settings.System.SCREEN_BRIGHTNESS, 120);
+        contentResolver.notifyChange(Settings.System.CONTENT_URI,
+                null);
 
+        Log.v("brad", "==> " +
+                getSettingValue(Settings.System.SCREEN_BRIGHTNESS));
 
     }
 
