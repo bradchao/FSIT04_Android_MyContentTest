@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 //        cursor.close();
 
         Log.v("brad", "==> " +
-                getSettingValue(Settings.System.SCREEN_BRIGHTNESS));
+                getSettingValue(Settings.System.FONT_SCALE));
 
 
     }
